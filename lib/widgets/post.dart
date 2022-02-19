@@ -1,4 +1,5 @@
 import 'package:choice_sample_project/views/post_detail.dart';
+import 'package:choice_sample_project/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
 import '../models/post_model.dart';
 
@@ -10,6 +11,7 @@ class Post extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
       child: Container(
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -39,14 +41,8 @@ class Post extends StatelessWidget {
         padding: const EdgeInsets.all(16),
       ),
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PostDetail(
-              postModel: postModel,
-            ),
-          ),
-        );
+        Navigator.of(context)
+            .push(CustomPageRoute(child: PostDetail(id: postModel.id)));
       },
     );
   }

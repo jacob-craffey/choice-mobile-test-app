@@ -1,8 +1,8 @@
-import 'dart:convert';
+import 'package:choice_sample_project/repositories/post_repository.dart';
 import 'package:flutter/material.dart';
-import '../models/post_model.dart';
+import 'package:choice_sample_project/widgets/error.dart';
+import '../widgets/loading.dart';
 import '../widgets/post.dart';
-import 'package:http/http.dart' as http;
 
 class PostList extends StatefulWidget {
   const PostList({Key? key}) : super(key: key);
@@ -12,20 +12,13 @@ class PostList extends StatefulWidget {
 }
 
 class _PostListState extends State<PostList> {
-  Future getPostData() async {
-    var response =
-        await http.get(Uri.https('jsonplaceholder.typicode.com', 'posts'));
+  final ScrollController _scrollController = ScrollController();
+  late Future<dynamic> _postsDataState = PostRepository().getPosts();
 
-    var jsonData = jsonDecode(response.body);
-    List<PostModel> posts = [];
-
-    for (var u in jsonData) {
-      PostModel postModel = PostModel(
-          userId: u['userId'], id: u['id'], title: u['title'], body: u['body']);
-      posts.add(postModel);
-    }
-
-    return posts;
+  void refreshList() {
+    setState(() {
+      _postsDataState = PostRepository().getPosts();
+    });
   }
 
   @override
@@ -47,31 +40,34 @@ class _PostListState extends State<PostList> {
         ),
         preferredSize: const Size.fromHeight(kToolbarHeight),
       ),
-      body: Card(
-        child: FutureBuilder(
-          future: getPostData(),
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.data == null) {
-              return const Center(
-                child: CircularProgressIndicator(
-                    color: Color.fromARGB(255, 05, 0, 255)),
-              );
-            } else {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, i) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                      child: Post(postModel: snapshot.data[i]),
-                    );
-                  },
-                ),
-              );
-            }
-          },
-        ),
+      body: FutureBuilder(
+        future: _postsDataState,
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.data != null) {
+            return Scrollbar(
+              controller: _scrollController,
+              thickness: 8,
+              radius: const Radius.circular(10),
+              interactive: true,
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                controller: _scrollController,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, i) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    child: Post(postModel: snapshot.data[i]),
+                  );
+                },
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Loading();
+          } else {
+            return Error(callback: refreshList);
+          }
+        },
       ),
     );
   }

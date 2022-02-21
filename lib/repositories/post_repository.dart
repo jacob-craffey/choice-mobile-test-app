@@ -8,11 +8,11 @@ class PostRepository {
       var response =
           await http.get(Uri.https('jsonplaceholder.typicode.com', 'posts'));
 
-      dynamic rawPostsData = jsonDecode(response.body);
+      dynamic jsonData = jsonDecode(response.body);
       List<PostModel> posts = [];
 
-      for (dynamic rawPost in rawPostsData) {
-        posts.add(mapPostData(rawPost));
+      for (dynamic rawPost in jsonData) {
+        posts.add(PostModel.fromJson(rawPost));
       }
       return posts;
     } catch (error) {
@@ -26,24 +26,11 @@ class PostRepository {
           .get(Uri.https('jsonplaceholder.typicode.com', 'posts/$id'));
 
       var jsonData = jsonDecode(response.body);
-      PostModel postModel = mapPostData(jsonData);
+      PostModel postModel = PostModel.fromJson(jsonData);
 
       return postModel;
     } catch (error) {
       throw Exception('Failed to get Post $id');
-    }
-  }
-
-  PostModel mapPostData(dynamic rawPost) {
-    try {
-      PostModel postModel = PostModel(
-          userId: rawPost['userId'],
-          id: rawPost['id'],
-          title: rawPost['title'],
-          body: rawPost['body']);
-      return postModel;
-    } catch (error) {
-      throw Exception('Failed to map Post JSON data');
     }
   }
 }

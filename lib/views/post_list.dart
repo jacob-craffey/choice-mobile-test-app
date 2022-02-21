@@ -15,10 +15,15 @@ class _PostListState extends State<PostList> {
   final ScrollController _scrollController = ScrollController();
   late Future<dynamic> _postsDataState = PostRepository().getPosts();
 
-  void refreshList() {
+  void retryGetPosts() {
     setState(() {
       _postsDataState = PostRepository().getPosts();
     });
+  }
+
+  Future<void> refreshGetPosts(BuildContext context) {
+    retryGetPosts();
+    return _postsDataState;
   }
 
   @override
@@ -26,10 +31,10 @@ class _PostListState extends State<PostList> {
     return Scaffold(
       appBar: PreferredSize(
         child: Container(
-          decoration: const BoxDecoration(boxShadow: [
+          decoration: BoxDecoration(boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(31, 0, 0, 0),
-              offset: Offset(0, 2.0),
+              color: Theme.of(context).colorScheme.onPrimary,
+              offset: const Offset(0, 2.0),
               blurRadius: 4.0,
             )
           ]),
@@ -40,34 +45,41 @@ class _PostListState extends State<PostList> {
         ),
         preferredSize: const Size.fromHeight(kToolbarHeight),
       ),
-      body: FutureBuilder(
-        future: _postsDataState,
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.data != null) {
-            return Scrollbar(
-              controller: _scrollController,
-              thickness: 8,
-              radius: const Radius.circular(10),
-              interactive: true,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
+      body: RefreshIndicator(
+        onRefresh: () => refreshGetPosts(context),
+        child: FutureBuilder(
+          future: _postsDataState,
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.data != null) {
+              return Scrollbar(
                 controller: _scrollController,
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, i) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    child: Post(postModel: snapshot.data[i]),
-                  );
-                },
-              ),
-            );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Loading();
-          } else {
-            return Error(callback: refreshList);
-          }
-        },
+                thickness: 8,
+                radius: const Radius.circular(10),
+                interactive: true,
+                child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _scrollController,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, i) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: Center(
+                        child: Container(
+                            child: Post(postModel: snapshot.data[i]),
+                            constraints: const BoxConstraints(maxWidth: 600)),
+                      ),
+                    );
+                  },
+                ),
+              );
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Loading();
+            } else {
+              return Error(callback: retryGetPosts);
+            }
+          },
+        ),
       ),
     );
   }

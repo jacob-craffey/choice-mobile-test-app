@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Error extends StatelessWidget {
-  const Error({Key? key, required this.callback}) : super(key: key);
-
   final void Function() callback;
+  const Error({Key? key, required this.callback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +23,13 @@ class Error extends StatelessWidget {
               onPressed: callback,
               style: ButtonStyle(
                   padding: MaterialStateProperty.all<EdgeInsets>(
-                      const EdgeInsets.all(16))),
-              child: const Text(
+                const EdgeInsets.fromLTRB(50, 16, 50, 16),
+              )),
+              child: Text(
                 'Retry',
                 style: TextStyle(
-                    color: Color.fromARGB(255, 05, 0, 255), fontSize: 16),
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontSize: 16),
               ),
             ),
           )

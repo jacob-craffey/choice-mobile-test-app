@@ -35,7 +35,7 @@ class Post extends StatelessWidget {
         ),
         decoration: BoxDecoration(
             border: Border.all(
-              color: const Color.fromARGB(31, 0, 0, 0),
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         padding: const EdgeInsets.all(16),

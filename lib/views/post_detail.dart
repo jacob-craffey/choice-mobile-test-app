@@ -36,8 +36,8 @@ class _PostDetailState extends State<PostDetail> {
           decoration: BoxDecoration(boxShadow: [
             BoxShadow(
               color: Theme.of(context).colorScheme.onPrimary,
-              offset: const Offset(0, 2.0),
-              blurRadius: 4.0,
+              offset: const Offset(0, 1.0),
+              blurRadius: 2.0,
             )
           ]),
           child: AppBar(

@@ -55,8 +55,6 @@ class _PostListState extends State<PostList> {
                 snapshot.data != null) {
               return Scrollbar(
                 controller: _scrollController,
-                thickness: 8,
-                radius: const Radius.circular(10),
                 interactive: true,
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),

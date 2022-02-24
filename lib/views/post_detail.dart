@@ -60,8 +60,7 @@ class _PostDetailState extends State<PostDetail> {
         child: FutureBuilder(
             future: _postDataState,
             builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.data != null) {
+              if (snapshot.data != null) {
                 return Container(
                   color: Colors.white,
                   child: Center(
@@ -125,7 +124,8 @@ class _PostDetailState extends State<PostDetail> {
                     ),
                   ),
                 );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
+              } else if (snapshot.connectionState == ConnectionState.waiting &&
+                  snapshot.data == null) {
                 return const Loading();
               } else {
                 return Error(callback: retryGetPost);

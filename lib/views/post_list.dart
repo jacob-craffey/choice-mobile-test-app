@@ -51,8 +51,7 @@ class _PostListState extends State<PostList> {
         child: FutureBuilder(
           future: _postsDataState,
           builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.data != null) {
+            if (snapshot.data != null) {
               return Scrollbar(
                 controller: _scrollController,
                 interactive: true,
@@ -74,7 +73,8 @@ class _PostListState extends State<PostList> {
                   itemCount: snapshot.data.length,
                 ),
               );
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
+            } else if (snapshot.connectionState == ConnectionState.waiting &&
+                snapshot.data == null) {
               return const Loading();
             } else {
               return Error(callback: retryGetPosts);

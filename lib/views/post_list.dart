@@ -1,3 +1,4 @@
+import 'package:choice_sample_project/constants/constants.dart';
 import 'package:choice_sample_project/repositories/post_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:choice_sample_project/widgets/error.dart';
@@ -64,7 +65,8 @@ class _PostListState extends State<PostList> {
                     return Center(
                       child: Container(
                         child: Post(postModel: snapshot.data[i]),
-                        constraints: const BoxConstraints(maxWidth: 600),
+                        constraints:
+                            const BoxConstraints(maxWidth: Constants.maxWidth),
                       ),
                     );
                   },

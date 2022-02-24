@@ -1,3 +1,4 @@
+import 'package:choice_sample_project/constants/constants.dart';
 import 'package:choice_sample_project/repositories/post_repository.dart';
 import 'package:choice_sample_project/widgets/error.dart';
 import 'package:choice_sample_project/widgets/loading.dart';
@@ -67,7 +68,7 @@ class _PostDetailState extends State<PostDetail> {
                     child: Container(
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height,
-                          maxWidth: 600),
+                          maxWidth: Constants.maxWidth),
                       color: Theme.of(context).colorScheme.background,
                       child: SingleChildScrollView(
                         physics: const AlwaysScrollableScrollPhysics(),

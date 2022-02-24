@@ -57,20 +57,21 @@ class _PostListState extends State<PostList> {
                 thickness: 8,
                 radius: const Radius.circular(10),
                 interactive: true,
-                child: ListView.builder(
-                  physics: const AlwaysScrollableScrollPhysics(),
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(16),
                   controller: _scrollController,
-                  itemCount: snapshot.data.length,
                   itemBuilder: (context, i) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                      child: Center(
-                        child: Container(
-                            child: Post(postModel: snapshot.data[i]),
-                            constraints: const BoxConstraints(maxWidth: 600)),
+                    return Center(
+                      child: Container(
+                        child: Post(postModel: snapshot.data[i]),
+                        constraints: const BoxConstraints(maxWidth: 600),
                       ),
                     );
                   },
+                  separatorBuilder: (context, index) => const SizedBox(
+                    height: 16,
+                  ),
+                  itemCount: snapshot.data.length,
                 ),
               );
             } else if (snapshot.connectionState == ConnectionState.waiting) {

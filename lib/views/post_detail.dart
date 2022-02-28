@@ -61,62 +61,64 @@ class _PostDetailState extends State<PostDetail> {
             future: _postDataState,
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.data != null) {
-                return Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: Container(
-                      constraints: BoxConstraints(
-                          minHeight: MediaQuery.of(context).size.height,
-                          maxWidth: Constants.maxWidth),
-                      color: Theme.of(context).colorScheme.background,
-                      child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: GestureDetector(
-                          onLongPress: () async {
-                            if (await Vibration.hasVibrator() != null) {
-                              Vibration.vibrate(duration: 50);
-                            }
+                return SafeArea(
+                  child: Container(
+                    color: Colors.white,
+                    child: Center(
+                      child: Container(
+                        constraints: BoxConstraints(
+                            minHeight: MediaQuery.of(context).size.height,
+                            maxWidth: Constants.maxWidth),
+                        color: Theme.of(context).colorScheme.background,
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: GestureDetector(
+                            onLongPress: () async {
+                              if (await Vibration.hasVibrator() != null) {
+                                Vibration.vibrate(duration: 50);
+                              }
 
-                            SnackBar snackBar = SnackBar(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.background,
-                              width: 230,
-                              duration: const Duration(seconds: 2),
-                              padding: const EdgeInsets.all(16),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text(
-                                'Post Copied to Clipboard!',
-                                style: Theme.of(context).textTheme.headline1,
-                                textAlign: TextAlign.center,
-                              ),
-                            );
-                            Clipboard.setData(
-                              ClipboardData(
-                                  text:
-                                      '${snapshot.data.title}\n\n${snapshot.data.body}'),
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  child: Text(snapshot.data.title,
-                                      textAlign: TextAlign.start,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline2),
+                              SnackBar snackBar = SnackBar(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.background,
+                                width: 230,
+                                duration: const Duration(seconds: 2),
+                                padding: const EdgeInsets.all(16),
+                                behavior: SnackBarBehavior.floating,
+                                content: Text(
+                                  'Post Copied to Clipboard!',
+                                  style: Theme.of(context).textTheme.headline1,
+                                  textAlign: TextAlign.center,
                                 ),
-                                Text(snapshot.data.body,
-                                    textAlign: TextAlign.start,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1)
-                              ],
+                              );
+                              Clipboard.setData(
+                                ClipboardData(
+                                    text:
+                                        '${snapshot.data.title}\n\n${snapshot.data.body}'),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 16),
+                                    child: Text(snapshot.data.title,
+                                        textAlign: TextAlign.start,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline2),
+                                  ),
+                                  Text(snapshot.data.body,
+                                      textAlign: TextAlign.start,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1)
+                                ],
+                              ),
                             ),
                           ),
                         ),

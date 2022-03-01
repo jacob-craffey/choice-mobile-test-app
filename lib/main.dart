@@ -26,6 +26,12 @@ class MyApp extends StatelessWidget {
             bodyText1: GoogleFonts.raleway(
                 fontSize: 22, fontWeight: FontWeight.w400, color: Colors.black),
           ),
+          pageTransitionsTheme: const PageTransitionsTheme(builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.windows: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+          }),
           colorScheme: const ColorScheme(
             brightness: Brightness.light,
             primary: Colors.black,

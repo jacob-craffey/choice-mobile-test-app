@@ -1,5 +1,4 @@
 import 'package:choice_sample_project/views/post_detail.dart';
-import 'package:choice_sample_project/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
 import '../models/post_model.dart';
 
@@ -41,8 +40,10 @@ class Post extends StatelessWidget {
         padding: const EdgeInsets.all(16),
       ),
       onTap: () {
-        Navigator.of(context)
-            .push(CustomPageRoute(child: PostDetail(id: postModel.id)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PostDetail(id: postModel.id)),
+        );
       },
     );
   }
